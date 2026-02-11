@@ -8,7 +8,7 @@ const GamifiedCTASection = () => {
     <section className="py-24 flex justify-center">
       <div
         className="relative w-[90%] max-w-5xl 
-        bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500
+        bg-linear-to-r from-indigo-600 via-purple-600 to-pink-500
         rounded-3xl p-8 md:p-14 text-center
         shadow-xl overflow-hidden"
       >

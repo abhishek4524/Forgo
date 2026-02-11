@@ -5,7 +5,7 @@ export default function Navbar() {
   const [active, setActive] = useState("How It Works");
 
   return (
-    <nav className="w-full bg-[#03bafc] relative">
+    <nav className="w-full bg-[#03bafc] border-b border-white relative">
       {/* Main Nav */}
       <div className="h-16 px-4 flex items-center justify-between">
         {/* Logo */}
