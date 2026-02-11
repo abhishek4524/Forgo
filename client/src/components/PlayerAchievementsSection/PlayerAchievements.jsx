@@ -1,5 +1,5 @@
 import React from 'react'
-import SectionTitle from './SectionTile/SectionTitle';
+import SectionTitle from '../SectionTile/SectionTitle';
 import PlayerAchievementsCard from "./PlayerAchievementsCard/PlayerAchievementsCard";
 
 const AchievementsSection = () => {

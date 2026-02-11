@@ -1,6 +1,6 @@
 import React from 'react'
 import LifecycleCard from './LifecycleCard/LifecycleCard';
-import SectionTitle from './SectionTile/SectionTitle';
+import SectionTitle from '../SectionTile/SectionTitle';
 
 const LifeCycleSection = () => {
   return (
