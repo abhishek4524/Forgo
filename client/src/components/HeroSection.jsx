@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 export default function HeroSection() {
   const words = ["Invest.", "Compete.", "Strategize.", "Dominate."];
   const [index, setIndex] = useState(0);
   const [worth, setWorth] = useState(128639);
   const [hovered, setHovered] = useState(false);
+  const mockupRef = useRef(null);
+  const containerRef = useRef(null);
 
   /* ===========================
      Rotating Headline Words
@@ -22,6 +24,44 @@ export default function HeroSection() {
       setWorth((prev) => prev + Math.floor(Math.random() * 25));
     }, 3500);
     return () => clearInterval(interval);
+  }, []);
+
+  // parallax mouse
+  useEffect(() => {
+    const el = containerRef.current;
+    const mock = mockupRef.current;
+    if (!el || !mock) return;
+
+    function onMove(e) {
+      const rect = el.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      // rotate and translate a little
+      const rotateX = (-y * 6).toFixed(2);
+      const rotateY = (x * 10).toFixed(2);
+      const translateX = (x * 8).toFixed(2);
+      const translateY = (y * 6).toFixed(2);
+
+      mock.style.transform = `translate(${translateX}px, ${translateY}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      mock.style.boxShadow = `${-translateX}px ${Math.abs(translateY)}px 40px rgba(4,24,44,0.35)`;
+    }
+
+    function onLeave() {
+      mock.style.transform = `translate(0px, 0px) rotateX(0deg) rotateY(0deg)`;
+      mock.style.boxShadow = `0 20px 40px rgba(4,24,44,0.25)`;
+    }
+
+    el.addEventListener("mousemove", onMove);
+    el.addEventListener("mouseleave", onLeave);
+    el.addEventListener("touchmove", onMove, { passive: true });
+    el.addEventListener("touchend", onLeave);
+
+    return () => {
+      el.removeEventListener("mousemove", onMove);
+      el.removeEventListener("mouseleave", onLeave);
+      el.removeEventListener("touchmove", onMove);
+      el.removeEventListener("touchend", onLeave);
+    };
   }, []);
 
   return (
@@ -45,8 +85,9 @@ export default function HeroSection() {
           </h1>
 
           <p className="mt-6 text-lg text-slate-600 max-w-xl">
-            A gamified finance simulator for students. Unlock community access at
-            higher levels. Chat. Compete. Strategize with top financial players.
+            A gamified finance simulator for students. Unlock community access
+            at higher levels. Chat. Compete. Strategize with top financial
+            players.
           </p>
 
           {/* Progress Hook */}
@@ -73,122 +114,47 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* RIGHT SIDE – Dashboard Preview */}
-        <div
-          className="relative cursor-pointer"
-          onMouseEnter={() => setHovered(true)}
-          onMouseLeave={() => setHovered(false)}
-        >
+        {/* Right: Mockup card with floating coins */}
+        <div className="relative w-full max-w-md md:max-w-xl mx-auto">
           <div
-            className={`bg-white p-6 rounded-3xl shadow-2xl transition-all duration-500 ${
-              hovered ? "scale-105 rotate-1" : ""
-            }`}
+            ref={mockupRef}
+            className="relative rounded-2xl overflow-hidden bg-white shadow-xl transition-transform duration-300"
+            style={{
+              transform: "translate(0px,0px) rotateX(0deg) rotateY(0deg)",
+              boxShadow: "0 20px 40px rgba(4,24,44,0.25)",
+            }}
           >
-            <div className="flex justify-between items-center">
-              <h3 className="font-bold text-lg text-slate-800">
-                👑 Future Mogul
-              </h3>
-              <span className="text-xs bg-[#03bafc]/10 text-[#03bafc] px-3 py-1 rounded-full">
-                Level 7
-              </span>
-            </div>
 
-            {/* Virtual Net Worth */}
-            <div className="mt-6">
-              <p className="text-sm text-slate-500">Virtual Net Worth</p>
-              <p className="text-4xl font-extrabold text-slate-900">
-                ₹ {worth.toLocaleString()}
-              </p>
-            </div>
+            {/* Mockup image */}
+            <img
+              src="/Dashboard.png"
+              alt="Dashboard preview"
+              className="w-full h-80 object-cover"
+              onDragStart={(e) => e.preventDefault()}
+            />
 
-            {/* Micro Stats */}
-            <div className="mt-6 grid grid-cols-3 gap-4 text-center">
-              <div className="bg-[#f4faff] p-3 rounded-xl">
-                <p className="text-xs text-slate-500">XP</p>
-                <p className="font-bold">8,530</p>
+            {/* Play overlay */}
+            <button
+              aria-label="Play preview"
+              className="absolute left-1/2 -translate-x-1/2 bottom-5 inline-flex items-center gap-3 px-4 py-2 rounded-full bg-gradient-to-r from-[#00c6ff] to-[#03bafc] text-white font-semibold shadow-md"
+            >
+              ▶ Watch Preview
+            </button>
+
+            {/* Floating coins inside card */}
+            <div className="pointer-events-none">
+              <div className="absolute -top-4 -left-4 w-10 h-10 rounded-full bg-yellow-400 flex items-center justify-center text-white shadow-lg animate-float">
+                💰
               </div>
 
-              <div className="bg-[#f4faff] p-3 rounded-xl">
-                <p className="text-xs text-slate-500">Rank</p>
-                <p className="font-bold">#245</p>
+              <div className="absolute top-6 right-6 w-8 h-8 rounded-full bg-yellow-400 flex items-center justify-center text-white shadow-md animate-float-slow">
+                💎
               </div>
 
-              <div className="bg-[#f4faff] p-3 rounded-xl">
-                <p className="text-xs text-slate-500">Badges</p>
-                <p className="font-bold">12</p>
+              <div className="absolute bottom-8 left-6 w-9 h-9 rounded-full bg-yellow-400 flex items-center justify-center text-white shadow-md animate-float">
+                🪙
               </div>
             </div>
-
-            {/* Realistic Animated Chart */}
-            <div className="mt-6 p-4 bg-[#f4faff] rounded-xl relative overflow-hidden">
-              {/* Title */}
-              <div className="flex justify-between items-center mb-3">
-                <span className="text-xs font-semibold text-slate-600">
-                  Portfolio Growth
-                </span>
-                <span className="text-xs text-green-600 font-bold">+12.4%</span>
-              </div>
-
-              {/* SVG Chart */}
-              <svg viewBox="0 0 300 100" className="w-full h-28">
-                {/* Grid Lines */}
-                {[0, 25, 50, 75].map((y) => (
-                  <line
-                    key={y}
-                    x1="0"
-                    y1={y}
-                    x2="300"
-                    y2={y}
-                    stroke="#e2e8f0"
-                    strokeWidth="1"
-                  />
-                ))}
-
-                {/* Glow Line */}
-                <path
-                  d="M0 80 Q50 60 100 65 T200 40 T300 30"
-                  fill="none"
-                  stroke="#03bafc"
-                  strokeWidth="3"
-                  className="drop-shadow-[0_0_6px_rgba(3,186,252,0.6)]"
-                  strokeDasharray="500"
-                  strokeDashoffset="500"
-                >
-                  <animate
-                    attributeName="stroke-dashoffset"
-                    from="500"
-                    to="0"
-                    dur="1.8s"
-                    fill="freeze"
-                  />
-                </path>
-
-                {/* Filled Area */}
-                <path
-                  d="M0 80 Q50 60 100 65 T200 40 T300 30 L300 100 L0 100 Z"
-                  fill="url(#grad)"
-                  opacity="0.3"
-                />
-
-                {/* Gradient Def */}
-                <defs>
-                  <linearGradient id="grad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#03bafc" />
-                    <stop offset="100%" stopColor="#0b64ff" />
-                  </linearGradient>
-                </defs>
-              </svg>
-
-              {/* Floating Profit Tag */}
-              <div className="absolute top-10 right-6 bg-white shadow-md px-3 py-1 rounded-full text-xs font-semibold text-[#03bafc]">
-                ₹ +4,320
-              </div>
-            </div>
-          </div>
-
-          {/* Decorative Floating Coin */}
-          <div className="absolute -top-4 -right-4 text-4xl animate-bounce">
-            💰
           </div>
         </div>
       </div>
