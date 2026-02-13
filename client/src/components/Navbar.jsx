@@ -78,7 +78,7 @@ export default function Navbar() {
           </a>
 
           <a
-            href="/start"
+            href="/signup"
             className="px-6 py-2 rounded-full bg-white text-[#03bafc] font-semibold shadow-md hover:scale-105 transition"
           >
             Start Game

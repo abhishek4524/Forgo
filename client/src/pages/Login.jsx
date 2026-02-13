@@ -1,71 +1,115 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const Login = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+export default function Login() {
+  const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("Email:", email);
-        console.log("Password:", password);
-    };
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
 
-    return (
-        <div className="relative min-h-screen flex items-center justify-center bg-linear-to-br from-[#03bafc]/20 via-white to-[#dff3ff] overflow-hidden">
-            
-            {/* Ambient Glow Background */}
-            <div className="absolute -top-40 -left-20 w-96 h-96 bg-[#03bafc]/20 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-0 -right-40 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl"></div>
+  const [error, setError] = useState("");
 
-            <div className="bg-white shadow-xl rounded-2xl p-10 w-full max-w-md">
-                <h2 className="text-3xl font-bold text-center text-slate-800 mb-6">
-                    Login to Continue
-                </h2>
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-                <form onSubmit={handleSubmit} className="space-y-5">
-                    <div>
-                        <label className="block text-sm font-medium text-slate-600 mb-1">
-                            Email
-                        </label>
-                        <input
-                            type="email"
-                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#03bafc]"
-                            placeholder="Enter your email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                        />
-                    </div>
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-                    <div>
-                        <label className="block text-sm font-medium text-slate-600 mb-1">
-                            Password
-                        </label>
-                        <input
-                            type="password"
-                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#03bafc]"
-                            placeholder="Enter your password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </div>
+    const storedUser = localStorage.getItem("fogroUser");
 
-                    <button
-                        type="submit"
-                        className="w-full bg-linear-to-r from-[#03bafc] to-[#0b64ff] text-white py-3 rounded-lg font-semibold hover:scale-105 transition"
-                    >
-                        Login
-                    </button>
-                </form>
+    if (!storedUser) {
+      setError("No account found. Please sign up first.");
+      return;
+    }
 
-                <p className="text-sm text-center text-slate-500 mt-6">
-                    Don't have an account?{" "}
-                    <a href="/signup" className="text-[#03bafc] font-medium">
-                        Sign Up
-                    </a>
-                </p>
-            </div>
-        </div>
-    );
-};
+    const user = JSON.parse(storedUser);
 
-export default Login;
+    if (user.email !== formData.email) {
+      setError("Email not found.");
+      return;
+    }
+
+    // Since we didn’t store password in signup (for demo simplicity)
+    // Assume login successful if email matches
+    navigate("/dashboard");
+  };
+
+  return (
+    <div className="relative min-h-screen flex items-center justify-center bg-linear-to-br from-[#03bafc]/20 via-white to-[#dff3ff] overflow-hidden px-6">
+
+      {/* Ambient Glow Background */}
+      <div className="absolute -top-40 -left-20 w-96 h-96 bg-[#03bafc]/20 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 -right-40 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl"></div>
+
+      <div className="bg-white shadow-2xl rounded-3xl p-10 w-full max-w-md relative">
+
+        <h2 className="text-3xl font-bold text-center text-slate-800 mb-6">
+          Welcome Back 👋
+        </h2>
+
+        {error && (
+          <div className="mb-4 text-sm text-red-500 bg-red-50 p-2 rounded-lg text-center">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+
+          <Input
+            label="Email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+          />
+
+          <Input
+            label="Password"
+            name="password"
+            type="password"
+            value={formData.password}
+            onChange={handleChange}
+          />
+
+          <button
+            type="submit"
+            className="w-full bg-linear-to-r from-[#03bafc] to-[#0b64ff] text-white py-3 rounded-xl font-semibold hover:scale-105 transition-all duration-300 shadow-md"
+          >
+            🚀 Enter Dashboard
+          </button>
+        </form>
+
+        <p className="text-sm text-center text-slate-500 mt-6">
+          Don't have an account?{" "}
+          <a href="/signup" className="text-[#03bafc] font-medium">
+            Sign Up
+          </a>
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function Input({ label, name, type, value, onChange }) {
+  return (
+    <div>
+      <label className="block text-sm font-medium text-slate-600 mb-1">
+        {label}
+      </label>
+      <input
+        type={type}
+        name={name}
+        required
+        value={value}
+        onChange={onChange}
+        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#03bafc]"
+      />
+    </div>
+  );
+}

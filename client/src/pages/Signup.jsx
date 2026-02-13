@@ -1,116 +1,95 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const Signup = () => {
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
+export default function Signup() {
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
     });
+  };
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    // Save user in localStorage (temporary auth system)
+    const user = {
+      name: formData.name,
+      email: formData.email,
+      level: 1,
+      netWorth: 128754,
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    localStorage.setItem("fogroUser", JSON.stringify(user));
 
-        if (formData.password !== formData.confirmPassword) {
-            alert("Passwords do not match!");
-            return;
-        }
+    // Redirect to dashboard
+    navigate("/dashboard");
+  };
 
-        console.log("Signup Data:", formData);
-    };
+  return (
+    <div className="relative min-h-screen flex items-center justify-center bg-linear-to-br from-[#03bafc]/20 via-white to-[#dff3ff] overflow-hidden px-6">
 
-    return (
-        <div className="relative min-h-screen flex items-center justify-center bg-linear-to-br from-[#03bafc]/20 via-white to-[#dff3ff] overflow-hidden">
+      <div className="bg-white shadow-2xl rounded-3xl p-10 w-full max-w-md relative">
 
-            <div className="bg-white shadow-xl rounded-2xl p-10 w-full max-w-md">
-                <h2 className="text-3xl font-bold text-center text-slate-800 mb-6">
-                    Create Your Account
-                </h2>
+        <h2 className="text-3xl font-bold text-center text-slate-800 mb-6">
+          Create Your Financial Identity
+        </h2>
 
-                <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit} className="space-y-5">
 
-                    <div>
-                        <label className="block text-sm font-medium text-slate-600 mb-1">
-                            Full Name
-                        </label>
-                        <input
-                            type="text"
-                            name="name"
-                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#03bafc]"
-                            placeholder="Enter your name"
-                            value={formData.name}
-                            onChange={handleChange}
-                        />
-                    </div>
+          <Input label="Full Name" name="name" type="text" value={formData.name} onChange={handleChange} />
+          <Input label="Email" name="email" type="email" value={formData.email} onChange={handleChange} />
+          <Input label="Password" name="password" type="password" value={formData.password} onChange={handleChange} />
+          <Input label="Confirm Password" name="confirmPassword" type="password" value={formData.confirmPassword} onChange={handleChange} />
 
-                    <div>
-                        <label className="block text-sm font-medium text-slate-600 mb-1">
-                            Email
-                        </label>
-                        <input
-                            type="email"
-                            name="email"
-                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#03bafc]"
-                            placeholder="Enter your email"
-                            value={formData.email}
-                            onChange={handleChange}
-                        />
-                    </div>
+          <button
+            type="submit"
+            className="w-full bg-linear-to-r from-[#03bafc] to-[#0b64ff] text-white py-3 rounded-xl font-semibold hover:scale-105 transition-all duration-300 shadow-md"
+          >
+            🚀 Enter Fogro
+          </button>
 
-                    <div>
-                        <label className="block text-sm font-medium text-slate-600 mb-1">
-                            Password
-                        </label>
-                        <input
-                            type="password"
-                            name="password"
-                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#03bafc]"
-                            placeholder="Enter your password"
-                            value={formData.password}
-                            onChange={handleChange}
-                        />
-                    </div>
+        </form>
 
-                    <div>
-                        <label className="block text-sm font-medium text-slate-600 mb-1">
-                            Confirm Password
-                        </label>
-                        <input
-                            type="password"
-                            name="confirmPassword"
-                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#03bafc]"
-                            placeholder="Confirm your password"
-                            value={formData.confirmPassword}
-                            onChange={handleChange}
-                        />
-                    </div>
+        <p className="text-sm text-center text-slate-500 mt-6">
+          Already have an account?{" "}
+          <a href="/login" className="text-[#03bafc] font-medium">
+            Login
+          </a>
+        </p>
+      </div>
+    </div>
+  );
+}
 
-                    <button
-                        type="submit"
-                        className="w-full bg-linear-to-r from-[#03bafc] to-[#0b64ff] text-white py-3 rounded-lg font-semibold hover:scale-105 transition"
-                    >
-                        Sign Up
-                    </button>
-
-                </form>
-
-                <p className="text-sm text-center text-slate-500 mt-6">
-                    Already have an account?{" "}
-                    <a href="/login" className="text-[#03bafc] font-medium">
-                        Login
-                    </a>
-
-                </p>
-            </div>
-        </div>
-    );
-};
-
-export default Signup;
+function Input({ label, name, type, value, onChange }) {
+  return (
+    <div>
+      <label className="block text-sm font-medium text-slate-600 mb-1">
+        {label}
+      </label>
+      <input
+        type={type}
+        name={name}
+        required
+        value={value}
+        onChange={onChange}
+        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#03bafc]"
+      />
+    </div>
+  );
+}
