@@ -6,7 +6,7 @@ const LeaderboardTabs = () => {
   const tabs = ["Global", "Community"];
 
   return (
-    <div className="flex justify-center mt-8">
+    <div className="flex justify-center mt-6">
       <div className="bg-blue-100 p-1 rounded-full flex gap-2">
         {tabs.map((tab) => (
           <button

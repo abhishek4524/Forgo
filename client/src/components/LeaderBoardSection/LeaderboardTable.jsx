@@ -30,7 +30,7 @@ const LeaderboardTable = () => {
   const visiblePlayers = showAll ? players : players.slice(0, 4);
 
   return (
-    <div className="mt-16 bg-white rounded-3xl shadow-md border border-blue-100 overflow-hidden">
+    <div className="mt-20 bg-white rounded-3xl shadow-md border border-blue-100 overflow-hidden">
 
       {/* Table Header */}
       <div className="grid grid-cols-4 px-6 py-4 bg-blue-50 text-sm font-semibold text-gray-600">
