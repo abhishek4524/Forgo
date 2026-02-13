@@ -136,7 +136,7 @@ export default function HeroSection() {
             {/* Play overlay */}
             <button
               aria-label="Play preview"
-              className="absolute left-1/2 -translate-x-1/2 bottom-5 inline-flex items-center gap-3 px-4 py-2 rounded-full bg-gradient-to-r from-[#00c6ff] to-[#03bafc] text-white font-semibold shadow-md"
+              className="absolute left-1/2 -translate-x-1/2 bottom-5 inline-flex items-center gap-3 px-4 py-2 rounded-full bg-linear-to-r from-[#00c6ff] to-[#03bafc] text-white font-semibold shadow-md"
             >
               ▶ Watch Preview
             </button>
