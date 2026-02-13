@@ -2,7 +2,7 @@ import { TrendingUp } from "lucide-react";
 
 const YourRankBar = ({ rank, points, userName, avatar, campus }) => {
   return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl bg-gradient-to-r from-[#1e90ff] to-[#2563eb] shadow-[0_12px_40px_rgba(37,99,235,0.4)] rounded-2xl md:rounded-3xlpx-5 md:px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0 text-white z-50">
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[95%] max-w-6xl bg-linear-to-r from-[#1e90ff] to-[#2563eb] shadow-[0_12px_40px_rgba(37,99,235,0.4)] rounded-2xl md:rounded-3xlpx-5 md:px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-0 text-white z-50">
       {/* Left Content */}
       <div className="flex flex-wrap items-center justify-center md:justify-start gap-6 md:gap-12 text-sm md:text-base text-center md:text-left">
 
