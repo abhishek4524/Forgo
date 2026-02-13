@@ -8,9 +8,9 @@ import maleUserImg from "../assets/Male-Avatar.png";
 
 const Leaderboard = () => {
   return (
-    <div className="min-h-screen bg-[#f5f9ff] text-gray-900">
+    <div className="relative min-h-screen bg-[#f5f9ff] text-gray-900 bg-linear-to-br from-[#03bafc]/20 via-white to-[#dff3ff]">
       <Navbar />
-      <div className="max-w-6xl mx-auto px-6 py-8 mb-25">
+      <div className="max-w-6xl mx-auto px-6 py-8 pb-25">
         <LeaderboardHeader />
         <LeaderboardTabs />
         <PodiumSection />
